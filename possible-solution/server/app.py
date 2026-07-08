@@ -17,7 +17,15 @@ def after_request(response):
 
 
 # Load model from pickle file
-model = pickle.load(open('model.pkl', 'rb'))
+model = None
+try:
+    model = pickle.load(open('model.pkl', 'rb'))
+except FileNotFoundError:
+    # Model file not found - will error at runtime
+    pass
+except Exception as e:
+    # Model loading failed
+    pass
 
 # Model takes two parameters - day of week and airport id, then returns a prediction of flight delay
 @app.route('/predict', methods=['GET'])
